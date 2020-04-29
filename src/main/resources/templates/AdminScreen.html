@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Screen</title>
+</head>
+<body>
+<h1>Admin Screen</h1>
+<form th:action="@{/attendanceReportByVisitor}" th:object="${report}" method="post" id="visitorReport">
+    <p>Visitor ID: <input type="text" th:field="*{visitorId}" id="visitorid" required/></p>
+    <input type="submit" id="submit" value="Generate Visitor Report" />
+</form>
+
+<form th:action="@{/attendanceRegister}" th:object="${report}" method="post" id="visitorReport">
+    <input type="submit" id="submit" value="Download full attendance register" />
+</form>
+</body>
+</html>

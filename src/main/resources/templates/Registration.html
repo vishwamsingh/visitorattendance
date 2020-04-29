@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Register visitor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+</head>
+<body>
+<h1>Registration Form</h1>
+
+<form th:action="@{/submit}" th:object="${visitor}" method="post" enctype="multipart/form-data" id="visitorForm">
+    <p>Phone: <input type="text" th:field="*{phone}" id="phone" required/></p>
+    <p>Name: <input type="text" th:field="*{name}" required/></p>
+    <p>Email: <input type="text" th:field="*{email}" required/></p>
+    <input type="hidden" id="image" th:field="*{photo}" required/>
+    <video id="video" width="100" height="100" autoplay></video>
+    <button type="button" id="snap">Snap Photo</button>
+    <canvas id="canvas" width="100" height="100"></canvas>
+    <script>
+const constraints = {
+  video: true
+};
+
+const video = document.querySelector('video');
+
+navigator.mediaDevices.getUserMedia(constraints).
+  then((stream) => {video.srcObject = stream});
+
+    var canvas = document.getElementById('canvas');
+    var imageHidden = document.getElementById('image');
+    var context = canvas.getContext('2d');
+    // Trigger photo take
+    document.getElementById("snap").addEventListener("click", function() {
+    context.drawImage(video, 0, 0, 100, 100);
+    imageHidden.value = canvas.toDataURL();
+    console.log(canvas.toDataURL());
+    });
+
+
+    </script>
+
+    <p><input type="submit" id="btnSubmit" value="Submit"/></p>
+    <p>
+        <button type="button" id="logout" hidden>Logout</button>
+    </p>
+    <p><input type="reset" id="btnReset" value="Reset"/></p>
+    <script>
+     document.getElementById("snap").addEventListener("click", function() {
+            imageHidden.value
+     });
+
+     $(function () {
+            $("#phone").change(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/search",
+                    dataType: "json",
+                    data: {'phone': $("#phone").val()},
+                    success: function (data) {
+                        console.log(data);
+                        $("#name").val(data.name);
+                        $("#email").val(data.email);
+                        var canvas = document.getElementById('canvas');
+                        var context = canvas.getContext('2d');
+                        var image = new Image();
+                        image.src = data.photo;
+                        image.onload = function() {
+                            context.drawImage(image, 0, 0, 100, 100);
+                        }
+                        $("#image").val(data.photo);
+                        if(data.loggedIn==true) {
+                            $("#logout").show();
+                            $("#btnSubmit").hide();
+                        }
+                    },
+                    error: function(xhr, ajaxOptions, thrownError){
+                        console.log(xhr.status);
+                        $("#logout").hide();
+                        $("#btnSubmit").show();
+                        $("#name").val("");
+                        $("#email").val("");
+                        var canvas = document.getElementById('canvas');
+                        var context = canvas.getContext('2d');
+                        context.clearRect(0,0,canvas.width, canvas.height);
+                    }
+                });
+            });
+
+             $("#logout").click(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/logout",
+                    dataType: "json",
+                    data: {'phone': $("#phone").val()},
+                    success: function (data) {
+                         window.location.reload();
+                    }
+                });
+
+             });
+     });
+
+    </script>
+
+</form>
+</body>
+</html>

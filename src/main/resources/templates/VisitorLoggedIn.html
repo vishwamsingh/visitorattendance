@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Visitor Logged In</title>
+</head>
+<body>
+<h1>Visitor logged in time</h1>
+<p>Date/Time:</p>
+<p id="datetime"></p>
+<script>
+var dt = new Date();
+document.getElementById("datetime").innerHTML = dt.toLocaleString();
+</script>
+<form action="/register">
+    <input type="submit" id="submit" value="Registration Screen" />
+</form>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Visitor registration successful</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<body>
+<h1>Visitor registration successful</h1>
+<form th:action="@{/login}" th:object="${visitor}" method="post">
+    <p>Id: <input type="text" th:field="*{id}" /> </p>
+    <p>Name: <input type="text" th:field="*{name}" /> </p>
+    <input type="hidden" id="lastLogIn" th:field="*{lastLogIn}" required/>
+    <input type="submit" id="submit" value="Login"/>
+    <button id="back" type="button" onclick="history.back();">Back</button>
+    <script>
+var dt = new Date();
+document.getElementById("lastLogIn").value = dt.toLocaleString();
+</script>
+
+</form>
+</body>
+</html>
